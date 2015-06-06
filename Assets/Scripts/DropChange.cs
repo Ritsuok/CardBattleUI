@@ -1,36 +1,41 @@
 ﻿using UnityEngine;
 using System.Collections;
+
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
+//using UnityEngine.UI;
+
+// NEXT STEP! make draggable obeject'S return place(parent) to be more simple!
 
 public class DropChange : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler {
 	
 	public Draggable.Slot typeOfItem = Draggable.Slot.INVENTORY;
 	GameObject target;
-	Transform parentReturnTable = null;
-	HorizontalLayoutGroup layoutLock;
 
-	void Sart(){
-		layoutLock = GetComponent<HorizontalLayoutGroup> ();
+	//HorizontalLayoutGroup layoutLock;
+
+/*	void Sart(){
+		//layoutLock = GetComponent<HorizontalLayoutGroup> ();
+		//layoutLock.enabled = false;
+
 	}
-
+*/
 	
 	public void OnPointerEnter(PointerEventData eventData){
 		if (eventData .pointerDrag == null) {
 			return;
 		}
-		parentReturnTable = this.transform.parent;
 		Draggable d = eventData.pointerDrag.GetComponent<Draggable> ();
-		if (d != null) {
-			foreach(Transform child in transform) {
-				Debug.Log(child.name + ":" + child.localPosition);
-				target = child.gameObject;
-				layoutLock.enabled = false;
-			}
 
-			d.placeholderParent = this.transform;
-			
+		if (d != null) {
+			//find child objects of this
+			foreach(Transform child in transform) {
+				//Debug.Log(child.name + ":" + child.localPosition);
+				target = child.gameObject;
+				//Debug.Log("layoutLock.enabled = " + layoutLock.enabled);
+				//layoutLock.enabled = false;
+			}
 		}
+
 	}
 	
 	public void OnPointerExit(PointerEventData eventData){
@@ -39,22 +44,35 @@ public class DropChange : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
 		}
 		Draggable d = eventData.pointerDrag.GetComponent<Draggable> ();
 		if (d != null && d.placeholderParent == this.transform) {
-			target.transform.SetParent(parentReturnTable);
+			//layoutLock.enabled = true;
+			//target.transform.SetParent(this.transform);
 			d.placeholderParent = d.parentToReturnTo;
-			layoutLock.enabled = true;
+
+
 		}
+		if(target != null){
+			target.transform.SetParent(this.transform);
+		}
+
 	}
 	
 	public void OnDrop(PointerEventData eventData){
 		//Debug.Log (eventData.pointerDrag.name + "was dropped to " + gameObject.name);
 		
 		Draggable d = eventData.pointerDrag.GetComponent<Draggable> ();
-		if (d != null && target != null) {
+		if (d != null) {
 			if(typeOfItem == d.typeOfItem || typeOfItem == Draggable.Slot.INVENTORY){
-				layoutLock.enabled = true;
-				target.transform.SetParent(d.parentToReturnTo);
-				d.parentToReturnTo = this.transform;
+				// placeholder's parent will be changed to this object
+				d.placeholderParent = this.transform;
+				//layoutLock.enabled = true;
+
+
+				//d.parentToReturnTo = this.transform;
+				d.transform.SetParent(this.transform);
 			}
+		}
+		if(target != null){
+			target.transform.SetParent(d.parentToReturnTo);
 		}
 	}
 }
