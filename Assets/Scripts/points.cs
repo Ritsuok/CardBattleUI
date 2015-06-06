@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 
-public class points : MonoBehaviour {
+public class Points : MonoBehaviour {
 
 	public Text costText;
 	public Text attackText;

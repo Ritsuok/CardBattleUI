@@ -179,6 +179,10 @@ Prefab:
       propertyPath: defencePoint
       value: 9
       objectReference: {fileID: 0}
+    - target: {fileID: 140716, guid: 729d649e37a81451dbfac4671dcbfa51, type: 2}
+      propertyPath: m_Name
+      value: Card A
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 729d649e37a81451dbfac4671dcbfa51, type: 2}
   m_IsPrefabParent: 0
@@ -499,7 +503,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 285921136}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 94be2d60c232e40439e567092dae22aa, type: 3}
+  m_Script: {fileID: 11500000, guid: 1cca5c9aec77d46739f704a9e8092e54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &285921139
@@ -847,7 +851,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 140716, guid: 729d649e37a81451dbfac4671dcbfa51, type: 2}
       propertyPath: m_Name
-      value: Card 2
+      value: Card B
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 729d649e37a81451dbfac4671dcbfa51, type: 2}
@@ -1221,7 +1225,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 140716, guid: 729d649e37a81451dbfac4671dcbfa51, type: 2}
       propertyPath: m_Name
-      value: Card 3
+      value: Card C
       objectReference: {fileID: 0}
     - target: {fileID: 11497538, guid: 729d649e37a81451dbfac4671dcbfa51, type: 2}
       propertyPath: attackPoint
@@ -1516,7 +1520,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 140716, guid: 729d649e37a81451dbfac4671dcbfa51, type: 2}
       propertyPath: m_Name
-      value: Card 5
+      value: Card E
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 729d649e37a81451dbfac4671dcbfa51, type: 2}
@@ -2032,7 +2036,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 140716, guid: 729d649e37a81451dbfac4671dcbfa51, type: 2}
       propertyPath: m_Name
-      value: Card 4
+      value: Card D
       objectReference: {fileID: 0}
     - target: {fileID: 11497538, guid: 729d649e37a81451dbfac4671dcbfa51, type: 2}
       propertyPath: attackPoint
@@ -2050,11 +2054,26 @@ RectTransform:
   m_PrefabParentObject: {fileID: 22415982, guid: 729d649e37a81451dbfac4671dcbfa51,
     type: 2}
   m_PrefabInternal: {fileID: 1974950045}
+--- !u!1 &2018853167 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 196716, guid: 14a7d0305521e45a695d5c933984366b, type: 2}
+  m_PrefabInternal: {fileID: 1952117983}
 --- !u!224 &2018853168 stripped
 RectTransform:
   m_PrefabParentObject: {fileID: 22457684, guid: 14a7d0305521e45a695d5c933984366b,
     type: 2}
   m_PrefabInternal: {fileID: 1952117983}
+--- !u!114 &2018853173
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2018853167}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94be2d60c232e40439e567092dae22aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2020267297
 Prefab:
   m_ObjectHideFlags: 0
