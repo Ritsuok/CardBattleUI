@@ -942,7 +942,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 196716, guid: 14a7d0305521e45a695d5c933984366b, type: 2}
       propertyPath: m_Name
-      value: TabletopHome
+      value: TabletopH0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 14a7d0305521e45a695d5c933984366b, type: 2}
@@ -1792,7 +1792,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 196716, guid: 14a7d0305521e45a695d5c933984366b, type: 2}
       propertyPath: m_Name
-      value: TabletopEnemyBase
+      value: TabletopE0
       objectReference: {fileID: 0}
     - target: {fileID: 11416624, guid: 14a7d0305521e45a695d5c933984366b, type: 2}
       propertyPath: m_Color.r

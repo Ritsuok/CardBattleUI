@@ -5,6 +5,7 @@ using System.Collections;
 public class Battle : MonoBehaviour {
 
 	Points points;
+	TurnEnd turnend;
 
 	GameObject childCard;
 
