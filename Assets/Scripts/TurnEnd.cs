@@ -5,6 +5,9 @@ using System.Collections.Generic;
 public class TurnEnd : MonoBehaviour {
 	// import Points Class
 	Points points;
+	// import DropChange Class
+	DropChange dropchange;
+
 	// BattlClass
 	Battle battle;
 
@@ -60,13 +63,15 @@ public class TurnEnd : MonoBehaviour {
 	private int E3_AP;
 	private int E3_DP;
 	private int E3_CP;
-	
+
+	private List<bool> HChildsAreTrue;
 	private List<GameObject> HtabletopGameobjects;
 	private List<GameObject> HchildGameobjects;
 	private List<int> HcardAPs;
 	private List<int> HcardDPs;
 	private List<int> HcardCPs;
-	
+
+	private List<bool> EChildsAreTrue;
 	private List<GameObject> EtabletopGameobjects;
 	private List<GameObject> EchildGameobjects;
 	private List<int> EcardAPs;
@@ -91,8 +96,10 @@ public class TurnEnd : MonoBehaviour {
 		E2 = GameObject.Find ("TabletopE2");
 		E3 = GameObject.Find ("TabletopE3");
 		//Debug.Log ("H1 = " + H1.name);
-		
+
+
 		// new List
+		HChildsAreTrue = new List<bool> (){false,false,false,false};
 		HtabletopGameobjects = new List<GameObject> (){H0,H1,H2,H3};
 		HchildGameobjects = new List<GameObject>(){H0Child,H1Child,H2Child,H3Child};
 		HcardAPs = new List<int>(){H0_AP,H1_AP,H2_AP,H3_AP};
@@ -100,6 +107,7 @@ public class TurnEnd : MonoBehaviour {
 		HcardCPs = new List<int>(){H0_CP,H1_CP,H2_CP,H3_CP};
 		
 		// new List
+		EChildsAreTrue = new List<bool> (){false,false,false,false};
 		EtabletopGameobjects = new List<GameObject> (){E0,E1,E2,E3};
 		EchildGameobjects = new List<GameObject>(){E0Child,E1Child,E2Child,E3Child};
 		EcardAPs = new List<int>(){E0_AP,E1_AP,E2_AP,E3_AP};
@@ -118,7 +126,16 @@ public class TurnEnd : MonoBehaviour {
 	
 	// do when this is clicked
 	public void isClicked(){
+		for (int i = 0; i < HtabletopGameobjects.Count; i++) {
+			dropchange = HtabletopGameobjects[i].GetComponent<DropChange>();
+			HChildsAreTrue[i] = dropchange.childIs;
+			Debug.Log ("H" + i + " Child = " + HChildsAreTrue[i]);
 
+			dropchange = EtabletopGameobjects[i].GetComponent<DropChange>();
+			EChildsAreTrue[i] = dropchange.childIs;
+			Debug.Log ("E" + i + " Child = " + EChildsAreTrue[i]);
+
+		}
 		
 		// inistialize with null or 0
 		for (int i = 0; i < HchildGameobjects.Count; i++) {
@@ -132,9 +149,9 @@ public class TurnEnd : MonoBehaviour {
 			EcardCPs[i] = 0;
 		}
 
-		Debug.Log (HtabletopGameobjects[0].transform.childCount);
-		Debug.Log ("HchildGameobjects.Count "+HchildGameobjects.Count);
-		Debug.Log ("HtabletopGameobjects.Count "+HtabletopGameobjects.Count);
+		//Debug.Log (HtabletopGameobjects[0].transform.childCount);
+		//Debug.Log ("HchildGameobjects.Count "+HchildGameobjects.Count);
+		//Debug.Log ("HtabletopGameobjects.Count "+HtabletopGameobjects.Count);
 		/*		if (H0.transform.IsChildOf(H0.transform))　{
 			　　Debug.Log("true");
 		}　else　{
@@ -143,33 +160,33 @@ public class TurnEnd : MonoBehaviour {
 */
 		// Home and Enemy get child, GetComponent<Points>, assign Ap,DP,CP
 		for (int i = 0; i < HtabletopGameobjects.Count; i++) {
-			Debug.Log ("HtabletopGameobjects in for loop : " + HtabletopGameobjects[i].transform.childCount);
+			//Debug.Log ("HtabletopGameobjects in for loop : " + HtabletopGameobjects[i].transform.childCount);
 /*			if (HtabletopGameobjects[i].transform.childCount != 0)　{
 				continue;
 			}
 */
-			HchildGameobjects[i] = HtabletopGameobjects[i].transform.GetChild (0).gameObject;
+			if (HChildsAreTrue[i]) {
+				HchildGameobjects[i] = HtabletopGameobjects[i].transform.GetChild (0).gameObject;
+				points = HchildGameobjects[i].GetComponent<Points> ();
+				HcardAPs[i] = points.attackPoint;
+				HcardDPs[i] = points.defencePoint;
+				HcardCPs[i] = points.costPoint;
+			}
 
-			points = HchildGameobjects[i].GetComponent<Points> ();
-			HcardAPs[i] = points.attackPoint;
 			Debug.Log ("H" + i + " Ap = " + HcardAPs[i]);
-			
-			HcardDPs[i] = points.defencePoint;
 			Debug.Log ("H" + i + " Dp = " + HcardDPs[i]);
-			
-			HcardCPs[i] = points.costPoint;
 			Debug.Log ("H" + i + " Cp = " + HcardCPs[i]);
 
-			EchildGameobjects[i] = EtabletopGameobjects[i].transform.GetChild (0).gameObject;
-			
-			points = EchildGameobjects[i].GetComponent<Points> ();
-			EcardAPs[i] = points.attackPoint;
+			if (HChildsAreTrue[i]) {
+				EchildGameobjects[i] = EtabletopGameobjects[i].transform.GetChild (0).gameObject;			
+				points = EchildGameobjects[i].GetComponent<Points> ();
+				EcardAPs[i] = points.attackPoint;
+				EcardDPs[i] = points.defencePoint;
+				EcardCPs[i] = points.costPoint;
+			}
+
 			Debug.Log ("E" + i + " Ap = " + EcardAPs[i]);
-			
-			EcardDPs[i] = points.defencePoint;
 			Debug.Log ("E" + i + " Dp = " + EcardDPs[i]);
-			
-			EcardCPs[i] = points.costPoint;
 			Debug.Log ("E" + i + " Cp = " + EcardCPs[i]);
 			
 		}

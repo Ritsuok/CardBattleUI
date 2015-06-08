@@ -11,6 +11,8 @@ public class DropChange : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
 	public Draggable.Slot typeOfItem = Draggable.Slot.INVENTORY;
 	GameObject target;
 
+	public bool childIs = false;
+
 	//HorizontalLayoutGroup layoutLock;
 
 /*	void Sart(){
@@ -48,10 +50,12 @@ public class DropChange : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
 			//target.transform.SetParent(this.transform);
 			d.placeholderParent = d.parentToReturnTo;
 
-
+			childIs =false;
 		}
 		if(target != null){
 			target.transform.SetParent(this.transform);
+
+			childIs = true;
 		}
 
 	}
@@ -69,10 +73,15 @@ public class DropChange : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
 
 				//d.parentToReturnTo = this.transform;
 				d.transform.SetParent(this.transform);
+
+				childIs = true;
+				Debug.Log("child is " + childIs);
 			}
 		}
 		if(target != null){
 			target.transform.SetParent(d.parentToReturnTo);
+
+			childIs =false;
 		}
 	}
 }
