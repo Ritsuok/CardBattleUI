@@ -7,8 +7,12 @@ public class TurnEnd : MonoBehaviour {
 	Points points;
 	// BattlClass
 	Battle battle;
-	
+
+	private GameObject mathPanel;
+
 	// Tabletop Card Ap DP CP default
+	private GameObject nullObj;
+
 	private GameObject H0;
 	private GameObject H0Child;
 	private int H0_AP;
@@ -71,6 +75,11 @@ public class TurnEnd : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
+		mathPanel = GameObject.Find ("MathPanel");
+		Debug.Log (mathPanel + "found");
+		mathPanel.SetActive(false);
+		nullObj = new GameObject ();
+
 		// Find Home tabletops
 		H0 = GameObject.Find ("TabletopH0");
 		H1 = GameObject.Find ("TabletopH1");
@@ -109,37 +118,38 @@ public class TurnEnd : MonoBehaviour {
 	
 	// do when this is clicked
 	public void isClicked(){
-		//H1Child = H1.transform.FindChild ("Child").gameObject;
+
 		
 		// inistialize with null or 0
 		for (int i = 0; i < HchildGameobjects.Count; i++) {
-			HchildGameobjects[i] = null;
+			HchildGameobjects[i] = nullObj;
 			HcardAPs[i] = 0;
 			HcardDPs[i] = 0;
 			HcardCPs[i] = 0;
-			EchildGameobjects[i] = null;
+			EchildGameobjects[i] = nullObj;
 			EcardAPs[i] = 0;
 			EcardDPs[i] = 0;
 			EcardCPs[i] = 0;
 		}
-		
 
-		/*
-		for (int i = 0; i < E1.transform.childCount; i++) {
-			print(E1.transform.GetChild (i).name);
-
+		Debug.Log (HtabletopGameobjects[0].transform.childCount);
+		Debug.Log ("HchildGameobjects.Count "+HchildGameobjects.Count);
+		Debug.Log ("HtabletopGameobjects.Count "+HtabletopGameobjects.Count);
+		/*		if (H0.transform.IsChildOf(H0.transform))　{
+			　　Debug.Log("true");
+		}　else　{
+			　　Debug.Log("false");
 		}
 */
-		//E1Child = E1.transform.FindChild("Card").gameObject;
-		
-		// Get child number0
-		//E1Child = E1.transform.GetChild(0).gameObject;
-		//Debug.Log ("E1childCard = " + E1Child.name);
-		
-		// Enemy get child, GetComponent<Points>, assign Ap,DP,CP
+		// Home and Enemy get child, GetComponent<Points>, assign Ap,DP,CP
 		for (int i = 0; i < HtabletopGameobjects.Count; i++) {
+			Debug.Log ("HtabletopGameobjects in for loop : " + HtabletopGameobjects[i].transform.childCount);
+/*			if (HtabletopGameobjects[i].transform.childCount != 0)　{
+				continue;
+			}
+*/
 			HchildGameobjects[i] = HtabletopGameobjects[i].transform.GetChild (0).gameObject;
-			
+
 			points = HchildGameobjects[i].GetComponent<Points> ();
 			HcardAPs[i] = points.attackPoint;
 			Debug.Log ("H" + i + " Ap = " + HcardAPs[i]);
@@ -163,52 +173,12 @@ public class TurnEnd : MonoBehaviour {
 			Debug.Log ("E" + i + " Cp = " + EcardCPs[i]);
 			
 		}
-/*		
-		// find childs
-		foreach(Transform child in H0.transform) {
-			if (child.gameObject == null) {
-				Debug.Log ("H0Child is null");
-				
-				return;
-			}
-			H0Child = child.gameObject;
-			Debug.Log ("H0childCard = " + H0Child.name);
-			HchildGameobjects[0] = H0Child;
-			Debug.Log ("H0childCard in List[0] = " + HchildGameobjects[0].name);
-			
-		}
-		foreach(Transform child in H1.transform) {
-			
-			H1Child = child.gameObject;
-			HchildGameobjects[1] = H1Child;
-		}
-		foreach(Transform child in H2.transform) {
-			
-			H2Child = child.gameObject;
-			HchildGameobjects[2] = H2Child;
-		}
-		foreach(Transform child in H3.transform) {
-			
-			H3Child = child.gameObject;
-			HchildGameobjects[3] = H3Child;
-		}
-		for (int i = 0; i < HchildGameobjects.Count; i++) {
-			if (HchildGameobjects[i] == null) {
-				Debug.Log (i + " null " );
-				Debug.Log (i + " Ap = " + HcardAPs[i]);
-			}else{
-				// Get PointClass of the childCard
-				points = HchildGameobjects[i].GetComponent<Points> ();
-				HcardAPs[i] = points.attackPoint;
-				Debug.Log (i + " Ap = " + HcardAPs[i]);
-			}
-			
-		}
-		/*		// Get PointClass of the childCard
-		points = H1Child.GetComponent<Points> ();
-		Debug.Log ("H1childCard = " + H1Child.name);
-		Debug.Log ("H1 Ap = " + points.attackPoint);
-*/
+
+
+		//GetComponent<mathPanel>().enabled = false;
+		mathPanel.SetActive(true);
+	
+
 		Debug.Log ("I'm Clicked");
 		//battle.attack ();
 		
