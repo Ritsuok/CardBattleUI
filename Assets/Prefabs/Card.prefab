@@ -83,7 +83,7 @@ GameObject:
   - 225: {fileID: 22551256}
   - 114: {fileID: 11497538}
   m_Layer: 5
-  m_Name: Card 1
+  m_Name: Card
   m_TagString: CardTag
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
