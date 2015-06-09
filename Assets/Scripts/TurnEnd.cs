@@ -3,10 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class TurnEnd : MonoBehaviour {
-	// import Points Class
+	// Field Points Class
 	Points points;
-	// import DropChange Class
+	// Field DropChange Class
 	DropChange dropchange;
+	// Field MathBattle Class
+	MathBattle mathbattle;
+
 
 	// BattlClass
 	Battle battle;
@@ -84,6 +87,7 @@ public class TurnEnd : MonoBehaviour {
 		Debug.Log (mathPanel + "found");
 		mathPanel.SetActive(false);
 		nullObj = new GameObject ();
+		mathbattle = new MathBattle ();
 
 		// Find Home tabletops
 		H0 = GameObject.Find ("TabletopH0");
@@ -116,6 +120,8 @@ public class TurnEnd : MonoBehaviour {
 		
 		// Get BattleClass
 		battle = H1.GetComponent<Battle> ();
+
+
 		
 	}
 	
@@ -200,8 +206,25 @@ public class TurnEnd : MonoBehaviour {
 
 		Debug.Log ("I'm Clicked");
 		//battle.attack ();
-		
+		Debug.Log ("AfterLoop E" + 1 + " Dp = " + EcardDPs[1]);
+		Debug.Log ("AfterLoop H" + 1 + " Ap = " + HcardAPs[1]);
+
+
+		//mathbattle.testMethod ("test is done");
+		mathbattle.inputDPAP (EcardDPs[1], HcardAPs[1]);
+		//mathbattle.inputDPAP (30, 15);
+
+
 	}
-	
+	public void firstBattle(bool winOrLoose){
+		mathPanel = GameObject.Find ("MathPanel");
+		mathPanel.SetActive(false);
+		if (winOrLoose == true) {
+			EchildGameobjects[1] = EtabletopGameobjects[1].transform.GetChild (0).gameObject;			
+			points = EchildGameobjects[1].GetComponent<Points> ();
+			points.defencePoint = EcardDPs[1]-HcardAPs[1];
+		}
+
+	}
 	
 }
