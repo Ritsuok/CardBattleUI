@@ -32,7 +32,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 		//Debug.Log ("OnBeginDrag");
 		parentToReturnTo = this.transform.parent;
 		placeholderParent = parentToReturnTo;
-		this.transform.SetParent (this.transform.parent.parent);
+		this.transform.SetParent (this.transform.parent.parent);//scene LayoutMatrixTest01 add .parent.parent
 
 		GetComponent<CanvasGroup> ().blocksRaycasts = false;
 	}

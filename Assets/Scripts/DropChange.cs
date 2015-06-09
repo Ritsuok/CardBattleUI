@@ -35,6 +35,14 @@ public class DropChange : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
 				target = child.gameObject;
 				//Debug.Log("layoutLock.enabled = " + layoutLock.enabled);
 				//layoutLock.enabled = false;
+				if(target != null){
+					childIs = true;
+					Debug.Log("OnPointerEnter child is " + childIs);
+				}else{
+					childIs = false;
+					Debug.Log("OnPointerEnter child is " + childIs);
+				}
+
 			}
 		}
 
@@ -51,11 +59,13 @@ public class DropChange : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
 			d.placeholderParent = d.parentToReturnTo;
 
 			childIs =false;
+			Debug.Log("OnPointerExit child is " + childIs);
 		}
 		if(target != null){
 			target.transform.SetParent(this.transform);
 
 			childIs = true;
+			Debug.Log("OnPointerExit child is " + childIs);
 		}
 
 	}
@@ -75,13 +85,14 @@ public class DropChange : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
 				d.transform.SetParent(this.transform);
 
 				childIs = true;
-				Debug.Log("child is " + childIs);
+				Debug.Log("OnPointerExit child is " + childIs);
 			}
 		}
 		if(target != null){
 			target.transform.SetParent(d.parentToReturnTo);
 
 			childIs =false;
+			Debug.Log("OnPointerExit child is " + childIs);
 		}
 	}
 }

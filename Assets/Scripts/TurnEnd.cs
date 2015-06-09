@@ -107,7 +107,7 @@ public class TurnEnd : MonoBehaviour {
 		HcardCPs = new List<int>(){H0_CP,H1_CP,H2_CP,H3_CP};
 		
 		// new List
-		EChildsAreTrue = new List<bool> (){false,false,false,false};
+		EChildsAreTrue = new List<bool> (){true,true,true,true};// after AI, adjust this! 
 		EtabletopGameobjects = new List<GameObject> (){E0,E1,E2,E3};
 		EchildGameobjects = new List<GameObject>(){E0Child,E1Child,E2Child,E3Child};
 		EcardAPs = new List<int>(){E0_AP,E1_AP,E2_AP,E3_AP};
@@ -130,9 +130,11 @@ public class TurnEnd : MonoBehaviour {
 			dropchange = HtabletopGameobjects[i].GetComponent<DropChange>();
 			HChildsAreTrue[i] = dropchange.childIs;
 			Debug.Log ("H" + i + " Child = " + HChildsAreTrue[i]);
-
+			// when Enemy cards tabletop starts with null, active the bellow script
+			/*
 			dropchange = EtabletopGameobjects[i].GetComponent<DropChange>();
 			EChildsAreTrue[i] = dropchange.childIs;
+			*/
 			Debug.Log ("E" + i + " Child = " + EChildsAreTrue[i]);
 
 		}
@@ -177,7 +179,7 @@ public class TurnEnd : MonoBehaviour {
 			Debug.Log ("H" + i + " Dp = " + HcardDPs[i]);
 			Debug.Log ("H" + i + " Cp = " + HcardCPs[i]);
 
-			if (HChildsAreTrue[i]) {
+			if (EChildsAreTrue[i]) {
 				EchildGameobjects[i] = EtabletopGameobjects[i].transform.GetChild (0).gameObject;			
 				points = EchildGameobjects[i].GetComponent<Points> ();
 				EcardAPs[i] = points.attackPoint;
