@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class TurnEnd : MonoBehaviour {
 	// Field Points Class
 	Points points;
+	private List<Points> pointsList;
 	// Field DropChange Class
 	DropChange dropchange;
 	// Field MathBattle Class
@@ -18,6 +19,9 @@ public class TurnEnd : MonoBehaviour {
 
 	// Tabletop Card Ap DP CP default
 	private GameObject nullObj;
+
+	private GameObject lostCardsH;
+	private GameObject lostCardsE;
 
 	private GameObject H0;
 	private GameObject H0Child;
@@ -80,29 +84,50 @@ public class TurnEnd : MonoBehaviour {
 	private List<int> EcardAPs;
 	private List<int> EcardDPs;
 	private List<int> EcardCPs;
+
+	private bool defeat = false;
+
+	enum State{
+		NotInBattle,
+		Battle0,
+		Battle1,
+		Battle2,
+		Battle3,
+	};
+
+	private int listIndex;
+
+	State state = State.NotInBattle;
+
+	private List<State> statelist;
+
 	
 	// Use this for initialization
 	void Start () {
 		mathPanel = GameObject.Find ("MathPanel");
 		Debug.Log (mathPanel + "found");
+		mathbattle = mathPanel.GetComponent<MathBattle> ();
 		mathPanel.SetActive(false);
 		nullObj = new GameObject ();
-		mathbattle = new MathBattle ();
+		//mathbattle = new MathBattle ();
 
 		// Find Home tabletops
 		H0 = GameObject.Find ("TabletopH0");
 		H1 = GameObject.Find ("TabletopH1");
 		H2 = GameObject.Find ("TabletopH2");
 		H3 = GameObject.Find ("TabletopH3");
+		lostCardsH = GameObject.Find ("LostCardH");
 		// Find Enemy tabletops
 		E0 = GameObject.Find ("TabletopE0");
 		E1 = GameObject.Find ("TabletopE1");
 		E2 = GameObject.Find ("TabletopE2");
 		E3 = GameObject.Find ("TabletopE3");
+		lostCardsE = GameObject.Find ("LostCardE");
 		//Debug.Log ("H1 = " + H1.name);
 
 
 		// new List
+		pointsList = new List<Points> (){points,points,points,points};
 		HChildsAreTrue = new List<bool> (){false,false,false,false};
 		HtabletopGameobjects = new List<GameObject> (){H0,H1,H2,H3};
 		HchildGameobjects = new List<GameObject>(){H0Child,H1Child,H2Child,H3Child};
@@ -117,16 +142,42 @@ public class TurnEnd : MonoBehaviour {
 		EcardAPs = new List<int>(){E0_AP,E1_AP,E2_AP,E3_AP};
 		EcardDPs = new List<int>(){E0_DP,E1_DP,E2_DP,E3_DP};
 		EcardCPs = new List<int>(){E0_CP,E1_CP,E2_CP,E3_CP};
+
+		statelist = new List<State>(){State.Battle0, State.Battle1, State.Battle2, State.Battle3, State.NotInBattle};
 		
 		// Get BattleClass
 		battle = H1.GetComponent<Battle> ();
 
-
+		 
 		
 	}
 	
 	// Update is called once per frame
 	void Update () {
+
+		switch (state) {
+		case State.Battle1:
+			listIndex = 1;
+			mathPanel.SetActive(true);
+			mathbattle.inputDPAP (EcardDPs [listIndex], HcardAPs [listIndex]);
+			state = State.NotInBattle;
+			break;
+		case State.Battle2:
+			listIndex = 2;
+			mathPanel.SetActive(true);
+			mathbattle.inputDPAP (EcardDPs [2], HcardAPs [2]);
+			state = State.NotInBattle;
+			break;
+		case State.Battle3:
+			listIndex = 3;
+			mathPanel.SetActive(true);
+			mathbattle.inputDPAP (EcardDPs [3], HcardAPs [3]);
+			state = State.NotInBattle;
+			break;
+		}
+		if (defeat == true) {
+			move();
+		}
 		
 	}
 	
@@ -175,10 +226,10 @@ public class TurnEnd : MonoBehaviour {
 */
 			if (HChildsAreTrue[i]) {
 				HchildGameobjects[i] = HtabletopGameobjects[i].transform.GetChild (0).gameObject;
-				points = HchildGameobjects[i].GetComponent<Points> ();
-				HcardAPs[i] = points.attackPoint;
-				HcardDPs[i] = points.defencePoint;
-				HcardCPs[i] = points.costPoint;
+				pointsList[i] = HchildGameobjects[i].GetComponent<Points> ();
+				HcardAPs[i] = pointsList[i].attackPoint;
+				HcardDPs[i] = pointsList[i].defencePoint;
+				HcardCPs[i] = pointsList[i].costPoint;
 			}
 
 			Debug.Log ("H" + i + " Ap = " + HcardAPs[i]);
@@ -187,10 +238,10 @@ public class TurnEnd : MonoBehaviour {
 
 			if (EChildsAreTrue[i]) {
 				EchildGameobjects[i] = EtabletopGameobjects[i].transform.GetChild (0).gameObject;			
-				points = EchildGameobjects[i].GetComponent<Points> ();
-				EcardAPs[i] = points.attackPoint;
-				EcardDPs[i] = points.defencePoint;
-				EcardCPs[i] = points.costPoint;
+				pointsList[i] = EchildGameobjects[i].GetComponent<Points> ();
+				EcardAPs[i] = pointsList[i].attackPoint;
+				EcardDPs[i] = pointsList[i].defencePoint;
+				EcardCPs[i] = pointsList[i].costPoint;
 			}
 
 			Debug.Log ("E" + i + " Ap = " + EcardAPs[i]);
@@ -205,13 +256,14 @@ public class TurnEnd : MonoBehaviour {
 	
 
 		Debug.Log ("I'm Clicked");
+		state = State.Battle1;
 		//battle.attack ();
-		Debug.Log ("AfterLoop E" + 1 + " Dp = " + EcardDPs[1]);
-		Debug.Log ("AfterLoop H" + 1 + " Ap = " + HcardAPs[1]);
+		Debug.Log ("AfterLoop E" + 1 + " Dp = " + EcardDPs[listIndex]);
+		Debug.Log ("AfterLoop H" + 1 + " Ap = " + HcardAPs[listIndex]);
 
 
 		//mathbattle.testMethod ("test is done");
-		mathbattle.inputDPAP (EcardDPs[1], HcardAPs[1]);
+		//mathbattle.inputDPAP (EcardDPs[listIndex], HcardAPs[listIndex]);
 		//mathbattle.inputDPAP (30, 15);
 
 
@@ -219,12 +271,59 @@ public class TurnEnd : MonoBehaviour {
 	public void firstBattle(bool winOrLoose){
 		mathPanel = GameObject.Find ("MathPanel");
 		mathPanel.SetActive(false);
+		print ("winOrLoose = " + winOrLoose);
+		print("fistBattle E" + 1 + " Dp = " + EcardDPs[listIndex]);
+		print("fistBattle E" + 1 + " card.name = " + EchildGameobjects[listIndex].name);
+		print("fistBattle E" + 1 + " points.defencePoint = " + pointsList[listIndex].defencePoint);
+
 		if (winOrLoose == true) {
-			EchildGameobjects[1] = EtabletopGameobjects[1].transform.GetChild (0).gameObject;			
-			points = EchildGameobjects[1].GetComponent<Points> ();
-			points.defencePoint = EcardDPs[1]-HcardAPs[1];
+
+			pointsList[listIndex].defencePoint = EcardDPs[listIndex]-HcardAPs[listIndex];
+			print("fistBattle E" + 1 + " points.defencePoint = " + pointsList[listIndex].defencePoint);
+			if (pointsList[listIndex].defencePoint <= 0) {
+				pointsList[listIndex].defencePoint = 0;
+			}
+			pointsList[listIndex].setPointonCard();
+			print("card.transform.position.x =" + EchildGameobjects[listIndex].transform.position.x);
+			print("card.transform.position.y =" + EchildGameobjects[listIndex].transform.position.y);
+			//EchildGameobjects[listIndex].transform.SetParent(lostCardsE.transform);
+			EchildGameobjects[listIndex].transform.SetParent(EchildGameobjects[listIndex].transform.parent.parent);
+			print("lostCardsE.transform.position.x =" + lostCardsE.transform.position.x);
+			print("lostCardsE.transform.position.y =" + lostCardsE.transform.position.y);
+			defeat = true;
 		}
 
+	}
+	void move(){
+		print ("moving");
+		int moveScale = 3;
+		int cardX = (int)EchildGameobjects [listIndex].transform.position.x;
+		int cardY = (int)EchildGameobjects [listIndex].transform.position.y;
+		float garbageX = lostCardsE.transform.position.x;
+		float garbageY = lostCardsE.transform.position.y;
+		if (garbageX <= cardX) {
+			print (EchildGameobjects[listIndex].transform.position.x + moveScale);
+			cardX -= moveScale;
+			//EchildGameobjects[listIndex].transform.position.x += moveScale;
+		}
+		if (garbageY >= cardY) {
+			//EchildGameobjects[listIndex].transform.position.y += moveScale;
+			cardY += moveScale;
+		}
+
+		print ("cardX = " + cardX + " lostCardsE.transform.position.x =" + lostCardsE.transform.position.x);
+		print ("cardY = " + cardY + " lostCardsE.transform.position.y =" + lostCardsE.transform.position.y);
+
+		EchildGameobjects [listIndex].transform.position = new Vector2 (cardX, cardY);
+		//EchildGameobjects [listIndex].transform.position.x = (float)cardX;
+		//EchildGameobjects [listIndex].transform.position.y = (float)cardY;
+
+		if (lostCardsE.transform.position.x >= EchildGameobjects [listIndex].transform.position.x && lostCardsE.transform.position.y <= EchildGameobjects [listIndex].transform.position.y) {
+			defeat = false;
+			EchildGameobjects[listIndex].transform.SetParent(lostCardsE.transform);
+
+			state = statelist[listIndex+1];
+		}
 	}
 	
 }

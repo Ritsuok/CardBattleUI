@@ -6,6 +6,7 @@ public class MathBattle : MonoBehaviour {
 	// Field TurnEnd Class
 	TurnEnd turnend;
 
+	private GameObject turnendbtn;
 
 	private GameObject E_DP_Field;
 	private GameObject E_DP_TextObj;
@@ -36,8 +37,10 @@ public class MathBattle : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-		turnend = new TurnEnd ();
+		//turnend = new TurnEnd ();
 		// Find GameObjects
+		turnendbtn = GameObject.Find ("TurnEndBtn");
+		turnend = turnendbtn.GetComponent<TurnEnd> ();
 		E_DP_Field = GameObject.Find ("EnemyPanel");
 		Debug.Log ("E_DP_Field name is " + E_DP_Field.name);
 		/*
@@ -55,13 +58,13 @@ public class MathBattle : MonoBehaviour {
 		//E_DP_TextObj = E_DP_TextObj.transform.GetChild (0).gameObject;
 		E_DP_TextObj = E_DP_Field.transform.FindChild ("Text").gameObject;
 		E_DP_Text = E_DP_TextObj.GetComponent<Text>();
-		E_DP_Text.text = "AA";
-		Debug.Log ("text of E DP is " + E_DP_Text.text);
+		//E_DP_Text.text = "AA";
+		//Debug.Log ("text of E DP is " + E_DP_Text.text);
 
 		H_AP_Field = GameObject.Find ("HomePanel");
 		H_AP_TextObj = H_AP_Field.transform.FindChild ("Text").gameObject;
 		H_AP_Text = H_AP_TextObj.GetComponent<Text>();
-		H_AP_Text.text = "BB";
+		//H_AP_Text.text = "BB";
 		//Debug.Log ("text of H AP is " + H_AP_Text.text);
 	
 	}
@@ -83,9 +86,14 @@ public class MathBattle : MonoBehaviour {
 	}
 
 	public void inputDPAP(int DP, int AP){
+		print ("inputDPAP got DP " + DP);
+		print ("inputDPAP got AP " + AP);
 		E_DP_Field = GameObject.Find ("EnemyPanel");
+		print ("E_DP_Field" + E_DP_Field.name);
 		E_DP_TextObj = E_DP_Field.transform.FindChild ("Text").gameObject;
+		print ("E_DP_TextObj" + E_DP_TextObj.name);
 		E_DP_Text = E_DP_TextObj.GetComponent<Text>();
+		print ("E_DP_Text" + E_DP_Text.text);
 		E_DP_Text.text = DP.ToString();
 
 		H_AP_Field = GameObject.Find ("HomePanel");
@@ -125,6 +133,7 @@ public class MathBattle : MonoBehaviour {
 			print ("Wrong!");
 			turnend.firstBattle(false);
 		}
+		answerText.text = "";
 	}
 
 	public void testMethod(string A){

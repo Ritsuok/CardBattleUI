@@ -33,4 +33,9 @@ public class Points : MonoBehaviour {
 	void Update () {
 	
 	}
+	public void setPointonCard(){
+		costText.text = costPoint.ToString();
+		attackText.text = attackPoint.ToString();
+		defenceText.text = defencePoint.ToString();
+	}
 }
