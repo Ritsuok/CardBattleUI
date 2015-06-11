@@ -16,6 +16,7 @@ public class TurnEnd : MonoBehaviour {
 	Battle battle;
 
 	private GameObject mathPanel;
+	private GameObject batsu;
 
 	// Tabletop Card Ap DP CP default
 	private GameObject nullObj;
@@ -104,6 +105,10 @@ public class TurnEnd : MonoBehaviour {
 
 	private int count = 0;
 
+	private float timer;
+	private int waitingTime = 2;
+	private bool wait = false;
+
 	
 	// Use this for initialization
 	void Start () {
@@ -111,6 +116,8 @@ public class TurnEnd : MonoBehaviour {
 		Debug.Log (mathPanel + "found");
 		mathbattle = mathPanel.GetComponent<MathBattle> ();
 		mathPanel.SetActive(false);
+		batsu = GameObject.Find ("BatsuImage");
+		batsu.SetActive (false);
 		nullObj = new GameObject ();
 		//mathbattle = new MathBattle ();
 
@@ -183,9 +190,11 @@ public class TurnEnd : MonoBehaviour {
 		}
 
 		if (attacked == true) {
-			shake();
+			shake(nullObj);
 		}
-		
+		if (wait == true) {
+			deactive(nullObj);
+		}
 	}
 	
 	// do when this is clicked
@@ -285,20 +294,21 @@ public class TurnEnd : MonoBehaviour {
 
 		if (winOrLoose == true) {
 
-			pointsList[listIndex].defencePoint = EcardDPs[listIndex]-HcardAPs[listIndex];
-			print("fistBattle E" + 1 + " points.defencePoint = " + pointsList[listIndex].defencePoint);
-			if (pointsList[listIndex].defencePoint <= 0) {
-				pointsList[listIndex].defencePoint = 0;
+			pointsList [listIndex].defencePoint = EcardDPs [listIndex] - HcardAPs [listIndex];
+			print ("fistBattle E" + 1 + " points.defencePoint = " + pointsList [listIndex].defencePoint);
+			if (pointsList [listIndex].defencePoint <= 0) {
+				pointsList [listIndex].defencePoint = 0;
 			}
-
+			nullObj = EchildGameobjects [listIndex];
 			attacked = true;
 			//pointsList[listIndex].setPointonCard();
-			print("card.transform.position.x =" + EchildGameobjects[listIndex].transform.position.x);
-			print("card.transform.position.y =" + EchildGameobjects[listIndex].transform.position.y);
+			print ("card.transform.position.x =" + EchildGameobjects [listIndex].transform.position.x);
+			print ("card.transform.position.y =" + EchildGameobjects [listIndex].transform.position.y);
 
-
-
-
+		} else {
+			batsu.SetActive (true);
+			nullObj = batsu;
+			wait = true;
 		}
 
 	}
@@ -346,10 +356,10 @@ public class TurnEnd : MonoBehaviour {
 			state = statelist[listIndex+1];
 		}
 	}
-	void shake(){
+	private void shake(GameObject shakeObject){
 		int moveScale = 10;
-		int cardX = (int)EchildGameobjects [listIndex].transform.position.x;
-		int cardY = (int)EchildGameobjects [listIndex].transform.position.y;
+		int cardX = (int)shakeObject.transform.position.x;
+		int cardY = (int)shakeObject.transform.position.y;
 
 		if (count%2 == 0) {
 			moveScale = moveScale*-1;
@@ -357,7 +367,7 @@ public class TurnEnd : MonoBehaviour {
 		}else{
 			cardX += moveScale;
 		}
-		EchildGameobjects [listIndex].transform.position = new Vector2 (cardX, cardY);
+		shakeObject.transform.position = new Vector2 (cardX, cardY);
 		count++;
 
 		if (count>79) {
@@ -369,4 +379,16 @@ public class TurnEnd : MonoBehaviour {
 
 
 	}
+
+	void deactive(GameObject deactiveObject){
+		timer += Time.deltaTime;
+		if (timer > waitingTime) {
+			deactiveObject.SetActive(false);
+			timer = 0;
+			nullObj = null;
+			wait = false;
+			state = statelist[listIndex];
+		}
+	}
+
 }
