@@ -331,7 +331,8 @@ public class TurnEnd : MonoBehaviour {
 			print("lostCardsE.transform.position.y =" + lostCardsE.transform.position.y);
 			defeat = true;
 		}else{
-
+			glow(HtabletopGameobjects [listIndex+1]);
+			glow(EtabletopGameobjects [listIndex+1]);
 			state = statelist[listIndex+1];
 		}
 
@@ -364,7 +365,8 @@ public class TurnEnd : MonoBehaviour {
 		if (lostCardsE.transform.position.x >= EchildGameobjects [listIndex].transform.position.x && lostCardsE.transform.position.y <= EchildGameobjects [listIndex].transform.position.y) {
 			defeat = false;
 			EchildGameobjects[listIndex].transform.SetParent(lostCardsE.transform);
-
+			glow(HtabletopGameobjects [listIndex+1]);
+			glow(EtabletopGameobjects [listIndex+1]);
 			state = statelist[listIndex+1];
 		}
 	}
@@ -420,7 +422,8 @@ public class TurnEnd : MonoBehaviour {
 			nowGlows[i].GetComponent<Image>().color = nowColors[i];
 			nowGlows[i].GetComponent<RectTransform> ().transform.localScale = new Vector3(1, 1, 1);
 		}
-
+		nowColors.Clear ();
+		nowGlows.Clear ();
 	}
 
 	bool wait2sec(){
