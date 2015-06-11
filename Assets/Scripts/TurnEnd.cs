@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+	
 
 public class TurnEnd : MonoBehaviour {
 	// Field Points Class
@@ -10,6 +12,8 @@ public class TurnEnd : MonoBehaviour {
 	DropChange dropchange;
 	// Field MathBattle Class
 	MathBattle mathbattle;
+
+
 
 
 	// BattlClass
@@ -168,9 +172,12 @@ public class TurnEnd : MonoBehaviour {
 		switch (state) {
 		case State.Battle1:
 			listIndex = 1;
-			mathPanel.SetActive(true);
-			mathbattle.inputDPAP (EcardDPs [listIndex], HcardAPs [listIndex]);
-			state = State.NotInBattle;
+
+			if(wait2sec()){
+				mathPanel.SetActive(true);
+				mathbattle.inputDPAP (EcardDPs [listIndex], HcardAPs [listIndex]);
+				state = State.NotInBattle;
+			}
 			break;
 		case State.Battle2:
 			listIndex = 2;
@@ -268,10 +275,12 @@ public class TurnEnd : MonoBehaviour {
 
 
 		//GetComponent<mathPanel>().enabled = false;
-		mathPanel.SetActive(true);
+		//mathPanel.SetActive(true);
 	
 
 		Debug.Log ("I'm Clicked");
+		glow(HtabletopGameobjects [1]);
+		glow(EtabletopGameobjects [1]);
 		state = State.Battle1;
 		//battle.attack ();
 		Debug.Log ("AfterLoop E" + 1 + " Dp = " + EcardDPs[listIndex]);
@@ -313,6 +322,7 @@ public class TurnEnd : MonoBehaviour {
 
 	}
 	void nextbattle(){
+		unGlow();
 		//if the answer is smaller than 0 release parent and set defeat = true
 		if (pointsList[listIndex].defencePoint <= 0) {
 			//EchildGameobjects[listIndex].transform.SetParent(lostCardsE.transform);
@@ -321,8 +331,10 @@ public class TurnEnd : MonoBehaviour {
 			print("lostCardsE.transform.position.y =" + lostCardsE.transform.position.y);
 			defeat = true;
 		}else{
+
 			state = statelist[listIndex+1];
 		}
+
 	}
 
 	void move(){
@@ -390,5 +402,39 @@ public class TurnEnd : MonoBehaviour {
 			state = statelist[listIndex];
 		}
 	}
+	private List<GameObject> nowGlows = new List<GameObject>();
+	private List<Color> nowColors = new List<Color> ();
+	void glow(GameObject glowObject){
+		nowGlows.Add(glowObject);
+		float size = (float)1.1;
+		Color originColor = glowObject.GetComponent<Image> ().color;
+		nowColors.Add (originColor);
+		print ("image color is " + glowObject.GetComponent<Image> ().color);
+		print ("Vector3 is " + glowObject.GetComponent<RectTransform> ().transform.localScale);
+		glowObject.GetComponent<Image>().color = new Color (255, 255, 255, 255);
+		glowObject.GetComponent<RectTransform> ().transform.localScale = new Vector3(size, size, size);
+
+	}
+	void unGlow(){
+		for (int i = 0; i < nowGlows.Count; i++) {
+			nowGlows[i].GetComponent<Image>().color = nowColors[i];
+			nowGlows[i].GetComponent<RectTransform> ().transform.localScale = new Vector3(1, 1, 1);
+		}
+
+	}
+
+	bool wait2sec(){
+		timer += Time.deltaTime;
+		Debug.Log ("timer = " + timer);
+		if (timer > waitingTime) {
+			timer = 0;
+			return true;
+		} else {
+			return false;
+		}
+
+	}
+
+
 
 }
