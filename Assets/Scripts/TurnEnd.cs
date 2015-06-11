@@ -86,6 +86,7 @@ public class TurnEnd : MonoBehaviour {
 	private List<int> EcardCPs;
 
 	private bool defeat = false;
+	private bool attacked = false;
 
 	enum State{
 		NotInBattle,
@@ -100,6 +101,8 @@ public class TurnEnd : MonoBehaviour {
 	State state = State.NotInBattle;
 
 	private List<State> statelist;
+
+	private int count = 0;
 
 	
 	// Use this for initialization
@@ -177,6 +180,10 @@ public class TurnEnd : MonoBehaviour {
 		}
 		if (defeat == true) {
 			move();
+		}
+
+		if (attacked == true) {
+			shake();
 		}
 		
 	}
@@ -271,10 +278,10 @@ public class TurnEnd : MonoBehaviour {
 	public void firstBattle(bool winOrLoose){
 		mathPanel = GameObject.Find ("MathPanel");
 		mathPanel.SetActive(false);
-		print ("winOrLoose = " + winOrLoose);
-		print("fistBattle E" + 1 + " Dp = " + EcardDPs[listIndex]);
-		print("fistBattle E" + 1 + " card.name = " + EchildGameobjects[listIndex].name);
-		print("fistBattle E" + 1 + " points.defencePoint = " + pointsList[listIndex].defencePoint);
+		//print ("winOrLoose = " + winOrLoose);
+		//print("fistBattle E" + 1 + " Dp = " + EcardDPs[listIndex]);
+		//print("fistBattle E" + 1 + " card.name = " + EchildGameobjects[listIndex].name);
+		//print("fistBattle E" + 1 + " points.defencePoint = " + pointsList[listIndex].defencePoint);
 
 		if (winOrLoose == true) {
 
@@ -283,17 +290,31 @@ public class TurnEnd : MonoBehaviour {
 			if (pointsList[listIndex].defencePoint <= 0) {
 				pointsList[listIndex].defencePoint = 0;
 			}
-			pointsList[listIndex].setPointonCard();
+
+			attacked = true;
+			//pointsList[listIndex].setPointonCard();
 			print("card.transform.position.x =" + EchildGameobjects[listIndex].transform.position.x);
 			print("card.transform.position.y =" + EchildGameobjects[listIndex].transform.position.y);
+
+
+
+
+		}
+
+	}
+	void nextbattle(){
+		//if the answer is smaller than 0 release parent and set defeat = true
+		if (pointsList[listIndex].defencePoint <= 0) {
 			//EchildGameobjects[listIndex].transform.SetParent(lostCardsE.transform);
 			EchildGameobjects[listIndex].transform.SetParent(EchildGameobjects[listIndex].transform.parent.parent);
 			print("lostCardsE.transform.position.x =" + lostCardsE.transform.position.x);
 			print("lostCardsE.transform.position.y =" + lostCardsE.transform.position.y);
 			defeat = true;
+		}else{
+			state = statelist[listIndex+1];
 		}
-
 	}
+
 	void move(){
 		print ("moving");
 		int moveScale = 3;
@@ -325,5 +346,27 @@ public class TurnEnd : MonoBehaviour {
 			state = statelist[listIndex+1];
 		}
 	}
-	
+	void shake(){
+		int moveScale = 10;
+		int cardX = (int)EchildGameobjects [listIndex].transform.position.x;
+		int cardY = (int)EchildGameobjects [listIndex].transform.position.y;
+
+		if (count%2 == 0) {
+			moveScale = moveScale*-1;
+			cardX += moveScale;
+		}else{
+			cardX += moveScale;
+		}
+		EchildGameobjects [listIndex].transform.position = new Vector2 (cardX, cardY);
+		count++;
+
+		if (count>79) {
+			pointsList[listIndex].setPointonCard();
+			count = 0;
+			nextbattle ();
+			attacked = false;
+		}
+
+
+	}
 }
