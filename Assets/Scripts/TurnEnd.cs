@@ -101,6 +101,8 @@ public class TurnEnd : MonoBehaviour {
 		Battle3,
 	};
 
+
+
 	private int listIndex;
 
 	State state = State.NotInBattle;
@@ -113,6 +115,8 @@ public class TurnEnd : MonoBehaviour {
 	private int waitingTime = 2;
 	private bool wait = false;
 
+	private int fightH;
+	private int fightE;
 	
 	// Use this for initialization
 	void Start () {
@@ -175,21 +179,25 @@ public class TurnEnd : MonoBehaviour {
 
 			if(wait2sec()){
 				mathPanel.SetActive(true);
-				mathbattle.inputDPAP (EcardDPs [listIndex], HcardAPs [listIndex]);
+				mathbattle.inputDPAP (EcardDPs [fightE], HcardAPs [fightH]);
 				state = State.NotInBattle;
 			}
 			break;
 		case State.Battle2:
 			listIndex = 2;
-			mathPanel.SetActive(true);
-			mathbattle.inputDPAP (EcardDPs [2], HcardAPs [2]);
-			state = State.NotInBattle;
+			if(wait2sec()){
+				mathPanel.SetActive(true);
+				mathbattle.inputDPAP (EcardDPs [fightE], HcardAPs [fightH]);
+				state = State.NotInBattle;
+			}
 			break;
 		case State.Battle3:
 			listIndex = 3;
-			mathPanel.SetActive(true);
-			mathbattle.inputDPAP (EcardDPs [3], HcardAPs [3]);
-			state = State.NotInBattle;
+			if(wait2sec()){
+				mathPanel.SetActive(true);
+				mathbattle.inputDPAP (EcardDPs [fightE], HcardAPs [fightH]);
+				state = State.NotInBattle;
+			}
 			break;
 		}
 		if (defeat == true) {
@@ -211,10 +219,10 @@ public class TurnEnd : MonoBehaviour {
 			HChildsAreTrue[i] = dropchange.childIs;
 			Debug.Log ("H" + i + " Child = " + HChildsAreTrue[i]);
 			// when Enemy cards tabletop starts with null, active the bellow script
-			/*
+
 			dropchange = EtabletopGameobjects[i].GetComponent<DropChange>();
 			EChildsAreTrue[i] = dropchange.childIs;
-			*/
+
 			Debug.Log ("E" + i + " Child = " + EChildsAreTrue[i]);
 
 		}
@@ -279,16 +287,37 @@ public class TurnEnd : MonoBehaviour {
 	
 
 		Debug.Log ("I'm Clicked");
-		glow(HtabletopGameobjects [1]);
-		glow(EtabletopGameobjects [1]);
-		state = State.Battle1;
+		listIndex = 1;
+		glowTheFight (listIndex);
+/*
+		//check if HtabletopGameobjects is on table
+		if (HcardAPs [1] <= 0) {
+			fightH = 2;
+			fightE = 2;
+			state = State.Battle2;
+		}
+		//check if EtabletopGameobjects is on table
+		if (EcardDPs [1] <= 0) {
+			fightH = 1;
+			fightE = 0;
+			glow (HtabletopGameobjects [fightH]);
+			glow (EtabletopGameobjects [fightE]);
+			state = State.Battle1;
+		} else {
+			fightH = 1;
+			fightE = 1;
+			glow (HtabletopGameobjects [fightH]);
+			glow (EtabletopGameobjects [fightE]);
+			state = State.Battle1;
+		}
+*/		
 		//battle.attack ();
-		Debug.Log ("AfterLoop E" + 1 + " Dp = " + EcardDPs[listIndex]);
-		Debug.Log ("AfterLoop H" + 1 + " Ap = " + HcardAPs[listIndex]);
+		Debug.Log ("AfterLoop E" + 1 + " Dp = " + EcardDPs[fightE]);
+		Debug.Log ("AfterLoop H" + 1 + " Ap = " + HcardAPs[fightH]);
 
 
 		//mathbattle.testMethod ("test is done");
-		//mathbattle.inputDPAP (EcardDPs[listIndex], HcardAPs[listIndex]);
+		//mathbattle.inputDPAP (EcardDPs[fightE], HcardAPs[fightH]);
 		//mathbattle.inputDPAP (30, 15);
 
 
@@ -297,22 +326,22 @@ public class TurnEnd : MonoBehaviour {
 		mathPanel = GameObject.Find ("MathPanel");
 		mathPanel.SetActive(false);
 		//print ("winOrLoose = " + winOrLoose);
-		//print("fistBattle E" + 1 + " Dp = " + EcardDPs[listIndex]);
-		//print("fistBattle E" + 1 + " card.name = " + EchildGameobjects[listIndex].name);
-		//print("fistBattle E" + 1 + " points.defencePoint = " + pointsList[listIndex].defencePoint);
+		//print("fistBattle E" + 1 + " Dp = " + EcardDPs[fightE]);
+		//print("fistBattle E" + 1 + " card.name = " + EchildGameobjects[fightE].name);
+		//print("fistBattle E" + 1 + " points.defencePoint = " + pointsList[fightE].defencePoint);
 
 		if (winOrLoose == true) {
 
-			pointsList [listIndex].defencePoint = EcardDPs [listIndex] - HcardAPs [listIndex];
-			print ("fistBattle E" + 1 + " points.defencePoint = " + pointsList [listIndex].defencePoint);
-			if (pointsList [listIndex].defencePoint <= 0) {
-				pointsList [listIndex].defencePoint = 0;
+			pointsList [fightE].defencePoint = EcardDPs [fightE] - HcardAPs [fightH];
+			print ("fistBattle E" + 1 + " points.defencePoint = " + pointsList [fightE].defencePoint);
+			if (pointsList [fightE].defencePoint <= 0) {
+				pointsList [fightE].defencePoint = 0;
 			}
-			nullObj = EchildGameobjects [listIndex];
+			nullObj = EchildGameobjects [fightE];
 			attacked = true;
-			//pointsList[listIndex].setPointonCard();
-			print ("card.transform.position.x =" + EchildGameobjects [listIndex].transform.position.x);
-			print ("card.transform.position.y =" + EchildGameobjects [listIndex].transform.position.y);
+			//pointsList[fightE].setPointonCard();
+			print ("card.transform.position.x =" + EchildGameobjects [fightE].transform.position.x);
+			print ("card.transform.position.y =" + EchildGameobjects [fightE].transform.position.y);
 
 		} else {
 			batsu.SetActive (true);
@@ -324,16 +353,15 @@ public class TurnEnd : MonoBehaviour {
 	void nextbattle(){
 		unGlow();
 		//if the answer is smaller than 0 release parent and set defeat = true
-		if (pointsList[listIndex].defencePoint <= 0) {
-			//EchildGameobjects[listIndex].transform.SetParent(lostCardsE.transform);
-			EchildGameobjects[listIndex].transform.SetParent(EchildGameobjects[listIndex].transform.parent.parent);
+		if (pointsList[fightE].defencePoint <= 0) {
+			//EchildGameobjects[fightE].transform.SetParent(lostCardsE.transform);
+			EchildGameobjects[fightE].transform.SetParent(EchildGameobjects[fightE].transform.parent.parent);
 			print("lostCardsE.transform.position.x =" + lostCardsE.transform.position.x);
 			print("lostCardsE.transform.position.y =" + lostCardsE.transform.position.y);
 			defeat = true;
 		}else{
-			glow(HtabletopGameobjects [listIndex+1]);
-			glow(EtabletopGameobjects [listIndex+1]);
-			state = statelist[listIndex+1];
+			listIndex ++;
+			glowTheFight(listIndex);
 		}
 
 	}
@@ -341,33 +369,32 @@ public class TurnEnd : MonoBehaviour {
 	void move(){
 		print ("moving");
 		int moveScale = 3;
-		int cardX = (int)EchildGameobjects [listIndex].transform.position.x;
-		int cardY = (int)EchildGameobjects [listIndex].transform.position.y;
+		int cardX = (int)EchildGameobjects [fightE].transform.position.x;
+		int cardY = (int)EchildGameobjects [fightE].transform.position.y;
 		float garbageX = lostCardsE.transform.position.x;
 		float garbageY = lostCardsE.transform.position.y;
 		if (garbageX <= cardX) {
-			print (EchildGameobjects[listIndex].transform.position.x + moveScale);
+			print (EchildGameobjects[fightE].transform.position.x + moveScale);
 			cardX -= moveScale;
-			//EchildGameobjects[listIndex].transform.position.x += moveScale;
+			//EchildGameobjects[fightE].transform.position.x += moveScale;
 		}
 		if (garbageY >= cardY) {
-			//EchildGameobjects[listIndex].transform.position.y += moveScale;
+			//EchildGameobjects[fightE].transform.position.y += moveScale;
 			cardY += moveScale;
 		}
 
 		print ("cardX = " + cardX + " lostCardsE.transform.position.x =" + lostCardsE.transform.position.x);
 		print ("cardY = " + cardY + " lostCardsE.transform.position.y =" + lostCardsE.transform.position.y);
 
-		EchildGameobjects [listIndex].transform.position = new Vector2 (cardX, cardY);
-		//EchildGameobjects [listIndex].transform.position.x = (float)cardX;
-		//EchildGameobjects [listIndex].transform.position.y = (float)cardY;
+		EchildGameobjects [fightE].transform.position = new Vector2 (cardX, cardY);
+		//EchildGameobjects [fightE].transform.position.x = (float)cardX;
+		//EchildGameobjects [fightE].transform.position.y = (float)cardY;
 
-		if (lostCardsE.transform.position.x >= EchildGameobjects [listIndex].transform.position.x && lostCardsE.transform.position.y <= EchildGameobjects [listIndex].transform.position.y) {
+		if (lostCardsE.transform.position.x >= EchildGameobjects [fightE].transform.position.x && lostCardsE.transform.position.y <= EchildGameobjects [fightE].transform.position.y) {
 			defeat = false;
-			EchildGameobjects[listIndex].transform.SetParent(lostCardsE.transform);
-			glow(HtabletopGameobjects [listIndex+1]);
-			glow(EtabletopGameobjects [listIndex+1]);
-			state = statelist[listIndex+1];
+			EchildGameobjects[fightE].transform.SetParent(lostCardsE.transform);
+			listIndex ++;
+			glowTheFight(listIndex);
 		}
 	}
 	private void shake(GameObject shakeObject){
@@ -385,7 +412,7 @@ public class TurnEnd : MonoBehaviour {
 		count++;
 
 		if (count>79) {
-			pointsList[listIndex].setPointonCard();
+			pointsList[fightE].setPointonCard();
 			count = 0;
 			nextbattle ();
 			attacked = false;
@@ -437,7 +464,29 @@ public class TurnEnd : MonoBehaviour {
 		}
 
 	}
-
+	void glowTheFight(int indexNow){
+		//check if HtabletopGameobjects is on table
+		if (HcardAPs [indexNow] <= 0) {
+			fightH = indexNow + 1;
+			fightE = indexNow + 1;
+			state = statelist [indexNow + 1];
+			indexNow ++;
+		}
+		//check if EtabletopGameobjects is on table
+		if (EcardDPs [indexNow] <= 0) {
+			fightH = indexNow;
+			fightE = 0;
+			glow (HtabletopGameobjects [fightH]);
+			glow (EtabletopGameobjects [fightE]);
+			state = statelist [indexNow];
+		} else {
+			fightH = indexNow;
+			fightE = indexNow;
+			glow (HtabletopGameobjects [fightH]);
+			glow (EtabletopGameobjects [fightE]);
+			state = statelist [indexNow];
+		}
+	}
 
 
 }
