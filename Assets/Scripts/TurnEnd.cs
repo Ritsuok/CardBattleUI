@@ -99,6 +99,7 @@ public class TurnEnd : MonoBehaviour {
 		Battle1,
 		Battle2,
 		Battle3,
+		GameOver
 	};
 
 
@@ -161,7 +162,7 @@ public class TurnEnd : MonoBehaviour {
 		EcardDPs = new List<int>(){E0_DP,E1_DP,E2_DP,E3_DP};
 		EcardCPs = new List<int>(){E0_CP,E1_CP,E2_CP,E3_CP};
 
-		statelist = new List<State>(){State.Battle0, State.Battle1, State.Battle2, State.Battle3, State.NotInBattle};
+		statelist = new List<State>(){State.Battle0, State.Battle1, State.Battle2, State.Battle3, State.NotInBattle,State.GameOver};
 		
 		// Get BattleClass
 		battle = H1.GetComponent<Battle> ();
@@ -393,6 +394,9 @@ public class TurnEnd : MonoBehaviour {
 		if (lostCardsE.transform.position.x >= EchildGameobjects [fightE].transform.position.x && lostCardsE.transform.position.y <= EchildGameobjects [fightE].transform.position.y) {
 			defeat = false;
 			EchildGameobjects[fightE].transform.SetParent(lostCardsE.transform);
+			if (EchildGameobjects[fightE] == EchildGameobjects[0]) {
+				youWin();
+			}
 			listIndex ++;
 			glowTheFight(listIndex);
 		}
@@ -487,6 +491,8 @@ public class TurnEnd : MonoBehaviour {
 			state = statelist [indexNow];
 		}
 	}
-
+	void youWin(){
+		print ("You Win!");
+	}
 
 }
