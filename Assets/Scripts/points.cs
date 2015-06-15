@@ -8,7 +8,7 @@ public class Points : MonoBehaviour {
 	public Text attackText;
 	public Text defenceText;
 	
-	public int costPoint = 5;
+	public int costPoint = 3;
 	public int attackPoint = 8;
 	public int defencePoint = 10;
 
