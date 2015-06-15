@@ -8,6 +8,7 @@ public class MyCard : MonoBehaviour {
 	public GameObject MyCardsHolder;
 	public GameObject dummyCard;
 	private GameObject clone;
+	private Vector3 CloneOriginalPosition;
 	private GameObject DeckPlaceH;
 	public List<GameObject> cards;
 	public int maxCards = 20;
@@ -18,6 +19,10 @@ public class MyCard : MonoBehaviour {
 	private float handX;
 	private float handY;
 
+	private int cardNum = 0;
+
+	private int moveScale = 3;
+
 	// Use this for initialization
 	void Start () {
 		//Random rand = new Random();
@@ -27,14 +32,15 @@ public class MyCard : MonoBehaviour {
 		DeckPlaceH = GameObject.Find ("DeckCardH");
 		clone = Instantiate (dummyCard, dummyCard.transform.position, dummyCard.transform.rotation) as GameObject;
 		clone.transform.SetParent (DeckPlaceH.transform);
-
+		CloneOriginalPosition = clone.transform.position;
+		print ("CloneOriginalPosition = " + CloneOriginalPosition);
 		availableCards = new List<string>(){"Prefabs/Card01","Prefabs/Card02","Prefabs/Card03","Prefabs/Card04","Prefabs/Card05"};
 		cardsInDeck = new List<string> ();
 		for (int i = 0; i < maxCards; i++) {
 			int rand = Random.Range(0,availableCards.Count);
 			cardsInDeck.Add(availableCards[rand]);
 		}
-
+/*
 		for (int i = 0; i < 5; i++) {
 			GameObject prefab = (GameObject)Resources.Load (cardsInDeck[i]);
 			print ("prefab's name is " + prefab.name);
@@ -42,6 +48,7 @@ public class MyCard : MonoBehaviour {
 			card01.transform.SetParent(MyCardsHolder.transform);
 			cardsInDeck.RemoveAt(i);
 		}
+*/		
 /*
 		GameObject prefab = (GameObject)Resources.Load ("Prefabs/Card01");
 		print ("prefab's name is " + prefab.name);
@@ -61,10 +68,15 @@ public class MyCard : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		movToHand ();
+		if (cardNum < 5) {
+			movToHand (cardNum);
+		}
+		//print("cardNum = " + cardNum);
+
 	}
-	int moveScale = 3;
-	void movToHand(){
+
+
+	void movToHand(int cardInt){
 
 		clone.transform.SetParent (clone.transform.parent);
 		Transform handTrans = MyCardsHolder.transform;
@@ -79,11 +91,25 @@ public class MyCard : MonoBehaviour {
 			//EchildGameobjects[fightE].transform.position.y += moveScale;
 			dummyY -= moveScale;
 		}
+
+
 		
 		//print ("cardX = " + cardX + " lostCardsE.transform.position.x =" + lostCardsE.transform.position.x);
 		//print ("cardY = " + cardY + " lostCardsE.transform.position.y =" + lostCardsE.transform.position.y);
 		
 		clone.transform.position = new Vector2 (dummyX, dummyY);
+		print ("CloneOriginalPosition = " + CloneOriginalPosition);
+
+		if (dummyX >= handTrans.position.x && dummyY <= handTrans.position.y) {
+			clone.transform.position = CloneOriginalPosition;
+			print ("clone.transform.position = " + clone.transform.position);
+			GameObject prefab = (GameObject)Resources.Load (cardsInDeck[cardInt]);
+			print ("prefab's name is " + prefab.name);
+			card01 = Instantiate(prefab);
+			card01.transform.SetParent(MyCardsHolder.transform);
+			cardsInDeck.RemoveAt(cardInt);
+			cardNum++;
+		}
 		//EchildGameobjects [fightE].transform.position.x = (float)cardX;
 		//EchildGameobjects [fightE].transform.position.y = (float)cardY;
 /*		
