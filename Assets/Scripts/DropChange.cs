@@ -15,12 +15,25 @@ public class DropChange : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
 
 	//HorizontalLayoutGroup layoutLock;
 
-/*	void Sart(){
-		//layoutLock = GetComponent<HorizontalLayoutGroup> ();
-		//layoutLock.enabled = false;
-
+	void Awake(){
+		print("DropChange Start");
+		foreach(Transform child in transform) {
+			//Debug.Log(child.name + ":" + child.localPosition);
+			target = child.gameObject;
+			//Debug.Log("layoutLock.enabled = " + layoutLock.enabled);
+			//layoutLock.enabled = false;
+			if(target != null){
+				childIs = true;
+				Debug.Log(target.name + " is " + childIs);
+			}else{
+				childIs = false;
+				Debug.Log(target.name + " is " + childIs);
+			}
+			
+		}
 	}
-*/
+	void Update(){
+	}
 	
 	public void OnPointerEnter(PointerEventData eventData){
 		if (eventData .pointerDrag == null) {
